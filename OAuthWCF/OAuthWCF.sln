@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthWCF.Service", "OAuthWCF.Service\OAuthWCF.Service.csproj", "{2B9FEF85-16F0-4C4B-9B23-68E16782A93B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthWCF.WebHost", "OAuthWCF.WebHost\OAuthWCF.WebHost.csproj", "{3947875C-A330-4D28-B80C-B10AD6715639}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthWCF.OAuth", "OAuthWCF.OAuth\OAuthWCF.OAuth.csproj", "{91C2FD61-BCD6-4F0B-8217-3EE343480B7E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2B9FEF85-16F0-4C4B-9B23-68E16782A93B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B9FEF85-16F0-4C4B-9B23-68E16782A93B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B9FEF85-16F0-4C4B-9B23-68E16782A93B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B9FEF85-16F0-4C4B-9B23-68E16782A93B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3947875C-A330-4D28-B80C-B10AD6715639}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3947875C-A330-4D28-B80C-B10AD6715639}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3947875C-A330-4D28-B80C-B10AD6715639}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3947875C-A330-4D28-B80C-B10AD6715639}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91C2FD61-BCD6-4F0B-8217-3EE343480B7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91C2FD61-BCD6-4F0B-8217-3EE343480B7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91C2FD61-BCD6-4F0B-8217-3EE343480B7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91C2FD61-BCD6-4F0B-8217-3EE343480B7E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
