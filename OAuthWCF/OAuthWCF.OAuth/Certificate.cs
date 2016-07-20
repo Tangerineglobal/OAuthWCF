@@ -16,7 +16,7 @@ namespace OAuthWCF.OAuth
 
         private static byte[] ReadStream(Stream input)
         {
-            var buffer = new byte[16 * 1024];
+            var buffer = new byte[16*1024];
             using (var ms = new MemoryStream())
             {
                 int read;

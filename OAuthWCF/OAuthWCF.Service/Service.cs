@@ -6,7 +6,6 @@ namespace OAuthWCF.Service
 {
     public class Service : IService
     {
-
         [PrincipalPermission(SecurityAction.Demand,Role = "AppUser, TokenIssuer", Authenticated = true)]
         public string GetEmail()
         {

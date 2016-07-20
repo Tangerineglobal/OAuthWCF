@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Security.Claims;
 using IdentityServer3.Core.Configuration;
 using IdentityServer3.Core.Models;
 using IdentityServer3.EntityFramework;
@@ -60,6 +61,7 @@ namespace OAuthWCF.OAuth
                 RequireSsl = true,
                 Factory = factory
             };
+
 
             app.UseIdentityServer(options);
         }
