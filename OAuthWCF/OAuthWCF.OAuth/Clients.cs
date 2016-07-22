@@ -19,6 +19,10 @@ namespace OAuthWCF.OAuth
                     ClientName = "MVC OWIN Implicit Client",
                     ClientId = "mvc.owin.implicit",
                     Flow = Flows.Implicit,
+                    EnableLocalLogin = true,
+                    Enabled = true,
+                    AccessTokenType = AccessTokenType.Jwt,
+                    AccessTokenLifetime = 3600,
                     AllowAccessTokensViaBrowser = false,
                     AllowedScopes = new List<string>
                     {

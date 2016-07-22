@@ -9,7 +9,7 @@ namespace OAuthWCF.Service
         public string RegisterUser(string name, string role, string emailaddress)
         {
             var admin = new OAuthWCF.OAuth.UserAdmin();
-            return admin.RegisterUser(name, role, emailaddress);
+            return string.Empty;//admin.RegisterUser(name, role, emailaddress);
         }
     }
 }

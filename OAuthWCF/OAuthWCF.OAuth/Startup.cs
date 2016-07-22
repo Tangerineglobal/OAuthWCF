@@ -1,15 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Security.Claims;
 using IdentityServer3.Core.Configuration;
 using IdentityServer3.Core.Models;
+using IdentityServer3.Core.Services;
+using IdentityServer3.Core.Services.Default;
 using IdentityServer3.EntityFramework;
 using Microsoft.Owin;
 using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.DataHandler;
 using Microsoft.Owin.Security.OAuth;
 using OAuthWCF.OAuth;
 using Owin;
+using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationOptions;
+using CookieOptions = IdentityServer3.Core.Configuration.CookieOptions;
 
 [assembly: OwinStartup(typeof(Startup))]
 
@@ -27,12 +33,13 @@ namespace OAuthWCF.OAuth
 
 
             var inMemoryManager = new InMemoryManager();
-            SetupClients(inMemoryManager.GetClients(), entityFrameworkOptions);
-            SetupScopes(inMemoryManager.GetScopes(), entityFrameworkOptions);
+            SetupClients(Clients.Get(), entityFrameworkOptions);
+            SetupScopes(Scopes.Get(), entityFrameworkOptions);
 
             var factory = new IdentityServerServiceFactory();
             factory.RegisterConfigurationServices(entityFrameworkOptions);
             factory.RegisterOperationalServices(entityFrameworkOptions);
+            factory.UserService = new Registration<IUserService>(typeof(CustomUserService));
 
             new TokenCleanup(entityFrameworkOptions, 1).Start();
 
@@ -46,8 +53,11 @@ namespace OAuthWCF.OAuth
                 Provider = new OAuthAuthorizationServerProvider(),
                 // mark true if you are not on https channel
                 AllowInsecureHttp = true,
+
+                TokenEndpointPath = new PathString("/oauth2/token"),
+                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(30),
             });
-            // indicate our intent to use bearer authentication
+        // indicate our intent to use bearer authentication
             app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions
             {
                 AuthenticationType = "Bearer",
@@ -60,6 +70,7 @@ namespace OAuthWCF.OAuth
                 SigningCertificate = Certificate.Load(), //Provide your X509 Certificate in production environment
                 RequireSsl = true,
                 Factory = factory
+
             };
 
 
