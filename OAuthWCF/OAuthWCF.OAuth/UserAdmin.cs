@@ -1,62 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
-using IdentityServer3.Core.Configuration;
+using System.Web;
+using IdentityServer3.Core;
 using IdentityServer3.Core.Models;
-using OAuthWCF.OAuth.Asp.Id;
-using Claim = System.Security.Claims.Claim;
-using ClaimTypes = System.Security.Claims.ClaimTypes;
+using IdentityServer3.EntityFramework;
+using OAuthWCF.OAuth.Generators;
 
 namespace OAuthWCF.OAuth
 {
     public class UserAdmin
     {
-        public async Task<string> RegisterUser(string name, string role, string emailaddress)
+        public string RegisterUser(string name, string role, string emailaddress)
         {
-            var claims = new List<Claim>
+            var clientIdGenerator = new ClientIdGenerator();
+            var clientSecretGenerator = new ClientSecretGenerator();
+            var repository = new ClientRepository.ClientRepository();
+            var connectionString = ConfigurationManager.ConnectionStrings["OAuthWCF.IdSrv"].ConnectionString;
+            var options = new EntityFrameworkServiceOptions {ConnectionString = connectionString};
+            IClientConfigurationDbContext clientdb = new ClientConfigurationDbContext
             {
-                new Claim(ClaimTypes.Name, name),
-                new Claim(ClaimTypes.Email, emailaddress),
-                new Claim(ClaimTypes.Role, role)
-            };
-            var connString = ConfigurationManager.ConnectionStrings["SocialNetwork.Idsvr"].ConnectionString;
-            var ctx = new CustomContext(connString);
-            var store = new CustomUserStore(ctx);
-            var mgr = new CustomUserManager(store);
-            var service = new CustomUserService(mgr);
-            var localctx = new LocalAuthenticationContext()
-            {
-                UserName = name
-            };
-            var client = Clients.Get().First();
-            var profilectx = new ProfileDataRequestContext()
-            {
-                IssuedClaims = claims,
-                Subject = ClaimsPrincipal.Current,
-                Client = client
+                Database =
+                {
+                    Connection =
+                    {
+                        ConnectionString = connectionString
+                    }
+                }
             };
 
+            var clients =  new[]
+            {
+                new Client
+                {
+                    ClientId = clientIdGenerator.GenerateClientIdAsync(clientdb),
+                    ClientSecrets = new List<Secret>
+                    {
+                        clientSecretGenerator.GenerateSecret(clientdb)
+                    },
+                    ClientName = name,
+                    Flow = Flows.ClientCredentials,
+                    AllowedScopes = new List<string>
+                    {
+                        role
+                    },
+                    Enabled = true,
+                    Claims = new List<Claim>()
+                    {
+                        new Claim(ClaimTypes.Name,name),
+                        new Claim(ClaimTypes.Role,role),
+                        new Claim(ClaimTypes.Email,emailaddress)
+                    },
+                    AllowClientCredentialsOnly = true
+                }
+            };
             
+            
+           repository.Add(clients,options);
 
-            await service.AuthenticateLocalAsync(localctx);
-            await service.GetProfileDataAsync(profilectx);
-
-            var user = ClaimsPrincipal.Current;
-            var token = user.FindFirst("access_token").Value;
-
-            var signoutctx = new SignOutContext()
-            {
-                ClientId = client.ClientId,
-                Subject = ClaimsPrincipal.Current
-            };
-
-            await service.SignOutAsync(signoutctx);
-
-            return token;
+            return string.Join(".", clients.First().ClientId, clients.First().ClientSecrets.First());
         }
     }
 }

@@ -3,9 +3,9 @@ using System.Security.Cryptography.X509Certificates;
 
 namespace OAuthWCF.OAuth
 {
-    public class Certificate
+    static class Certificate
     {
-        public static X509Certificate2 Load()
+        public static X509Certificate2 Get()
         {
             var assembly = typeof(Certificate).Assembly;
             using (var stream = assembly.GetManifestResourceStream("OAuthWCF.OAuth.idsrv3test.pfx"))
@@ -16,8 +16,8 @@ namespace OAuthWCF.OAuth
 
         private static byte[] ReadStream(Stream input)
         {
-            var buffer = new byte[16*1024];
-            using (var ms = new MemoryStream())
+            byte[] buffer = new byte[16 * 1024];
+            using (MemoryStream ms = new MemoryStream())
             {
                 int read;
                 while ((read = input.Read(buffer, 0, buffer.Length)) > 0)

@@ -1,21 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Security.Claims;
 using IdentityServer3.Core.Configuration;
 using IdentityServer3.Core.Models;
 using IdentityServer3.Core.Services;
-using IdentityServer3.Core.Services.Default;
 using IdentityServer3.EntityFramework;
 using Microsoft.Owin;
-using Microsoft.Owin.Security;
-using Microsoft.Owin.Security.DataHandler;
-using Microsoft.Owin.Security.OAuth;
 using OAuthWCF.OAuth;
 using Owin;
-using AuthenticationOptions = IdentityServer3.Core.Configuration.AuthenticationOptions;
-using CookieOptions = IdentityServer3.Core.Configuration.CookieOptions;
+//using OAuthWCF.Data;
+//using OAuthWCF.Data.Models;
+//using OAuthWCF.Data.Repositories;
 
 [assembly: OwinStartup(typeof(Startup))]
 
@@ -28,62 +23,47 @@ namespace OAuthWCF.OAuth
             var entityFrameworkOptions = new EntityFrameworkServiceOptions
             {
                 ConnectionString =
-                    ConfigurationManager.ConnectionStrings["SocialNetwork.Idsvr"].ConnectionString
+                    ConfigurationManager.ConnectionStrings["OAuthWCF.IdSrv"].ConnectionString
             };
 
-
             var inMemoryManager = new InMemoryManager();
-            SetupClients(Clients.Get(), entityFrameworkOptions);
-            SetupScopes(Scopes.Get(), entityFrameworkOptions);
+            SetupClients(inMemoryManager.GetClients(), entityFrameworkOptions);
+            SetupScopes(inMemoryManager.GetScopes(), entityFrameworkOptions);
 
+            //Repositories
+            var userRepository =
+                new UserRepository.UserRepository(ConfigurationManager.ConnectionStrings["OAuthWCF.Users"].ConnectionString);
+            //var claimsRepository =
+            //    new ClaimRepository(ConfigurationManager.ConnectionStrings["OAuthWCF.Users"].ConnectionString);
+
+
+            //Register EntityFramework Options
             var factory = new IdentityServerServiceFactory();
             factory.RegisterConfigurationServices(entityFrameworkOptions);
             factory.RegisterOperationalServices(entityFrameworkOptions);
-            factory.UserService = new Registration<IUserService>(typeof(CustomUserService));
+            factory.UserService = new Registration<IUserService>(
+                typeof(UserService));
+            //factory.Register(new Registration<IRepository<User>>(userRepository));
+            //factory.Register(new Registration<IRepository<Claim>>(claimsRepository));
 
             new TokenCleanup(entityFrameworkOptions, 1).Start();
 
-
-            app.UseOAuthAuthorizationServer(new OAuthAuthorizationServerOptions
-            {
-                // the endpoint path which will be consumed via HTTP. e.g. http://website[:port]/api/auth
-
-                AuthorizeEndpointPath = new PathString("/api/auth"),
-                //Provider is a class which inherits from OAuthAuthorizationServerProvider.Will be covered next.
-                Provider = new OAuthAuthorizationServerProvider(),
-                // mark true if you are not on https channel
-                AllowInsecureHttp = true,
-
-                TokenEndpointPath = new PathString("/oauth2/token"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(30),
-            });
-        // indicate our intent to use bearer authentication
-            app.UseOAuthBearerAuthentication(new OAuthBearerAuthenticationOptions
-            {
-                AuthenticationType = "Bearer",
-                AuthenticationMode = AuthenticationMode.Active
-            });
-
-
             var options = new IdentityServerOptions
             {
-                SigningCertificate = Certificate.Load(), //Provide your X509 Certificate in production environment
-                RequireSsl = true,
+                SigningCertificate = Certificate.Get(), //Do not use this certificate. Change it with your own. 
+                RequireSsl = false,
+                //for testing purposes. Please change it with true when you are going to deploy in production. 
                 Factory = factory
-
             };
-
 
             app.UseIdentityServer(options);
         }
-
 
         public void SetupClients(IEnumerable<Client> clients,
             EntityFrameworkServiceOptions options)
         {
             using (var context =
-                new ClientConfigurationDbContext(options.ConnectionString,
-                    options.Schema))
+                new ClientConfigurationDbContext(options.ConnectionString))
             {
                 if (context.Clients.Any()) return;
 
@@ -100,8 +80,7 @@ namespace OAuthWCF.OAuth
             EntityFrameworkServiceOptions options)
         {
             using (var context =
-                new ScopeConfigurationDbContext(options.ConnectionString,
-                    options.Schema))
+                new ScopeConfigurationDbContext(options.ConnectionString))
             {
                 if (context.Scopes.Any()) return;
 
