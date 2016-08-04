@@ -12,7 +12,7 @@ namespace OAuthWCF.Api.Controllers
     public class UserAdminController : ApiController
     {
         [ScopeAuthorize(new[] {"TokenUser"})]
-        public string RegisterUser([FromBody] string name, [FromBody] string role, [FromBody] string emailaddress)
+        public string RegisterUser([FromUri] string name, [FromUri] string role, [FromUri] string emailaddress)
         {
             var useradmin = new UserAdmin();
             return useradmin.RegisterUser(name, role, emailaddress);
