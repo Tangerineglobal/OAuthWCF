@@ -3,10 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthWCF.Service", "OAuthWCF.Service\OAuthWCF.Service.csproj", "{2B9FEF85-16F0-4C4B-9B23-68E16782A93B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthWCF.WebHost", "OAuthWCF.WebHost\OAuthWCF.WebHost.csproj", "{EFD04607-0CFF-49E4-A714-B0162EFA875C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthWCF.OAuth", "OAuthWCF.OAuth\OAuthWCF.OAuth.csproj", "{3ACEF543-46D9-454D-80F0-05C376607084}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OAuthWCF.Api", "OAuthWCF.Api\OAuthWCF.Api.csproj", "{A8DF7E98-8087-40BD-BFDA-AFE7A2E836C8}"
@@ -17,14 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2B9FEF85-16F0-4C4B-9B23-68E16782A93B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2B9FEF85-16F0-4C4B-9B23-68E16782A93B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2B9FEF85-16F0-4C4B-9B23-68E16782A93B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2B9FEF85-16F0-4C4B-9B23-68E16782A93B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EFD04607-0CFF-49E4-A714-B0162EFA875C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EFD04607-0CFF-49E4-A714-B0162EFA875C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EFD04607-0CFF-49E4-A714-B0162EFA875C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EFD04607-0CFF-49E4-A714-B0162EFA875C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3ACEF543-46D9-454D-80F0-05C376607084}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3ACEF543-46D9-454D-80F0-05C376607084}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3ACEF543-46D9-454D-80F0-05C376607084}.Release|Any CPU.ActiveCfg = Release|Any CPU
