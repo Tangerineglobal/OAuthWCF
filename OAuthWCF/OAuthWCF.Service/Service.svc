@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Service="OAuthWCF.Service.Service"  CodeBehind="Service.cs" Language="C#" Debug="false"%>
