@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Service="OAuthWCF.Service.UserAdmin"  CodeBehind="UserAdmin.cs" Debug="false"%>
